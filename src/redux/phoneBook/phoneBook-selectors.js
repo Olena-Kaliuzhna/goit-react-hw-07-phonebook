@@ -4,13 +4,14 @@ const getLoading = state => state.contacts.loading;
 const getAllContacts = state => state.contacts.items;
 const getFilter = state => state.contacts.filter;
 
-const getFilteredContacts = state => {
-  const filter = getFilter(state);
-  const allContacts = getAllContacts(state);
-  return allContacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase()),
-  );
-};
+const getFilteredContacts = createSelector(
+  [getAllContacts, getFilter],
+  (allContacts, filter) => {
+    return allContacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase()),
+    );
+  },
+);
 export default {
   getLoading,
   getAllContacts,
