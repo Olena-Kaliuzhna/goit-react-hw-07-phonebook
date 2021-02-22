@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import phoneBookOperations from '../../redux/phoneBook/phoneBook-operations';
+import phoneBookSelectors from '../../redux/phoneBook/phoneBook-selectors';
 import ErrorPopup from '../ErrorPopup/ErrorPopup';
 import { CSSTransition } from 'react-transition-group';
 import PropTypes from 'prop-types';
@@ -94,7 +95,7 @@ class ContactForm extends Component {
   }
 }
 const mapStateToProps = state => ({
-  contacts: state.contacts.items,
+  contacts: phoneBookSelectors.getAllContacts(state),
 });
 
 const mapDispatchToProps = dispatch => ({

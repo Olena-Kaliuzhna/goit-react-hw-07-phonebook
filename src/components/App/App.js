@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import { connect } from 'react-redux';
 import phoneBookOperations from '../../redux/phoneBook/phoneBook-operations';
+import phoneBookSelectors from '../../redux/phoneBook/phoneBook-selectors';
 import ContactForm from '../ContactForm/ContactForm.js';
 import Filter from '../Filter/Filter.js';
 import ContactList from '../ContactList/ContactList.js';
@@ -31,14 +32,14 @@ class App extends Component {
         <ContactForm />
 
         <CSSTransition
-          in={contacts.length > 1}
+          in={contacts.length > 0}
           classNames={filterAnim}
           timeout={250}
           unmountOnExit
         >
           <Filter />
         </CSSTransition>
-        {this.props.isLoading && <h2 className={s.loader}>Загружаем...</h2>}
+        {this.props.isLoading && <h2 className={s.title}>Загружаем...</h2>}
         <CSSTransition
           in={contacts.length > 0}
           appear={true}
@@ -56,8 +57,8 @@ class App extends Component {
   }
 }
 const mapStateToProps = state => ({
-  contacts: state.contacts.items,
-  isLoading: state.contacts.loading,
+  contacts: phoneBookSelectors.getAllContacts(state),
+  isLoading: phoneBookSelectors.getLoading(state),
 });
 const mapDispatchToProps = dispatch => ({
   fetchContacts: () => dispatch(phoneBookOperations.fetchContacts()),

@@ -2,6 +2,7 @@ import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import { connect } from 'react-redux';
 import phoneBookOperations from '../../redux/phoneBook/phoneBook-operations';
+import phoneBookSelectors from '../../redux/phoneBook/phoneBook-selectors';
 import PropTypes from 'prop-types';
 import ContactListItem from './ContactListItem';
 import s from './Contact.module.css';
@@ -27,14 +28,9 @@ function ContactList({ contacts, onDeleteContact }) {
   );
 }
 
-const getFilteredContacts = (allContacts, filter) => {
-  return allContacts.filter(contact =>
-    contact.name.toLowerCase().includes(filter.toLowerCase()),
-  );
-};
-const mapStateToProps = ({ contacts: { items, filter } }) => {
+const mapStateToProps = state => {
   return {
-    contacts: getFilteredContacts(items, filter),
+    contacts: phoneBookSelectors.getFilteredContacts(state),
   };
 };
 
