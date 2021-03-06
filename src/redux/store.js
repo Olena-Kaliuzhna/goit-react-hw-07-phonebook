@@ -8,7 +8,6 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-// import storage from 'redux-persist/lib/storage';
 import phoneBookReducer from './phoneBook/phoneBook-reducer';
 
 const middleware = [
@@ -27,7 +26,5 @@ const store = configureStore({
   middleware,
   devTools: process.env.NODE_ENV === 'development',
 });
-
-// const persistor = persistStore(store);
 
 export default store;

@@ -37,6 +37,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   onDeleteContact: id => dispatch(phoneBookOperations.deleteContact(id)),
 });
+
 ContactList.propTypes = {
   contacts: PropTypes.arrayOf(
     PropTypes.shape({

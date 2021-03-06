@@ -9,6 +9,10 @@
   border-radius: 10px;
   box-shadow: 10px 14px 8px 0px rgba(9, 145, 16, 0.77);
 }
+.contactsWrapper {
+  position: relative;
+}
+
 .title {
   margin-bottom: 10px;
   text-align: center;

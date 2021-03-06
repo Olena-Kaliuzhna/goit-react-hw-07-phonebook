@@ -13,3 +13,5 @@ export function addContact(contact) {
 export function deleteContact(id) {
   return axios.delete(`/contacts/${id}`);
 }
+
+export default { fetchContacts, addContact, deleteContact };

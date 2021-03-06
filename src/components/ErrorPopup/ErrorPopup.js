@@ -1,17 +1,49 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import phoneBookSelectors from '../../redux/phoneBook/phoneBook-selectors';
+import phoneBookActions from '../../redux/phoneBook/phoneBook-actions';
 import PropTypes from 'prop-types';
+import { CSSTransition } from 'react-transition-group';
 import s from './ErrorPopup.module.css';
+import anim from '../animation.module.css';
 
-function ErrorPopup({ text }) {
-  return (
-    <div className={s.popup}>
-      <h1>{text}</h1>
-    </div>
-  );
+class ErrorPopup extends Component {
+  static propTypes = {
+    message: PropTypes.string,
+    error: PropTypes.object,
+    clearError: PropTypes.func,
+  };
+
+  componentDidMount() {
+    if (this.props.error) {
+      setTimeout(() => {
+        this.props.clearError();
+      }, 3000);
+    }
+  }
+
+  render() {
+    return (
+      <CSSTransition
+        in={!!this.props.message}
+        timeout={250}
+        classNames={anim}
+        unmountOnExit
+      >
+        <div className={s.popup}>
+          <p>{this.props.message}</p>
+        </div>
+      </CSSTransition>
+    );
+  }
 }
 
-ErrorPopup.propTypes = {
-  text: PropTypes.string.isRequired,
-};
+const mapStateToProps = state => ({
+  error: phoneBookSelectors.getError(state),
+});
 
-export default ErrorPopup;
+const mapDispatchToProps = dispatch => ({
+  clearError: () => dispatch(phoneBookActions.clearError()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ErrorPopup);

@@ -3,17 +3,25 @@ import { connect } from 'react-redux';
 import phoneBookOperations from '../../redux/phoneBook/phoneBook-operations';
 import phoneBookSelectors from '../../redux/phoneBook/phoneBook-selectors';
 import ErrorPopup from '../ErrorPopup/ErrorPopup';
-import { CSSTransition } from 'react-transition-group';
 import PropTypes from 'prop-types';
 import s from './ContactForm.module.css';
-import anim from '../animation.module.css';
 
 class ContactForm extends Component {
+  static propTypes = {
+    contacts: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string,
+        number: PropTypes.string,
+      }),
+    ),
+    onAddContact: PropTypes.func.isRequired,
+  };
   state = {
     name: '',
     number: '',
     error: false,
-    errorMessage: '',
+    errorMessage: null,
   };
 
   reset() {
@@ -34,11 +42,10 @@ class ContactForm extends Component {
 
     if (contacts.some(contact => contact.name === name)) {
       this.setState({
-        error: true,
         errorMessage: 'Этот контакт уже существует',
       });
       setTimeout(() => {
-        this.setState({ error: false });
+        this.setState({ errorMessage: null });
       }, 3000);
       this.reset();
       return;
@@ -53,6 +60,7 @@ class ContactForm extends Component {
 
     return (
       <div>
+        <ErrorPopup message={errorMessage} />
         <form className={s.wrapper} onSubmit={this.handleSubmit}>
           <label className={s.field}>
             <span className={s.name}>Name</span>
@@ -82,14 +90,6 @@ class ContactForm extends Component {
             Add contact
           </button>
         </form>
-        <CSSTransition
-          in={this.state.error}
-          timeout={250}
-          classNames={anim}
-          unmountOnExit
-        >
-          <ErrorPopup text={errorMessage} />
-        </CSSTransition>
       </div>
     );
   }
@@ -103,14 +103,4 @@ const mapDispatchToProps = dispatch => ({
     dispatch(phoneBookOperations.addContact(name, number)),
 });
 
-ContactForm.propTypes = {
-  contacts: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      name: PropTypes.string,
-      number: PropTypes.string,
-    }),
-  ),
-  onAddContact: PropTypes.func.isRequired,
-};
 export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
